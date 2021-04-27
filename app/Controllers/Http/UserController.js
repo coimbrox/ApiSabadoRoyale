@@ -16,7 +16,7 @@ async store ({ request, response}) {
   // const data = request.only(['username', 'email', 'password']);
   const {Controller, Action} = request.all();
 
-     const {username, email, password} = request.all();
+     const {username, email,IdActvision, password} = request.all();
   // procurando pelo usuário no banco de dados
     const userExists = await User.findBy('email', email)
     // se o usuário existir
@@ -25,7 +25,7 @@ async store ({ request, response}) {
         .status(400)
         .send({ message: { error: 'Usuário ja Cadastrado' } })
     }
-  const user = await User.create({username, email, password});
+  const user = await User.create({username, email,IdActvision, password});
   const logs = await Log.create({ Controller: 'User', Action:'Criar'});
 
   return user, logs, response.status(200).send({message: 'Usuário Criado'});
@@ -37,9 +37,9 @@ async update ({ params, request, response, auth }) {
   const {Controller, Action} = request.all();
   const {id}= auth.user;
   const user = await User.findOrFail(params.id);
-  const {username, email, password} = request.all();
+  const {username, email,IdActvision, password} = request.all();
 
-  user.merge({username, email, password, user_id:id});
+  user.merge({username, email, password,IdActvision, user_id:id});
   await user.save();
   const logs = await Log.create({ Controller: 'User', Action:'Editar', user_id:id});
 
